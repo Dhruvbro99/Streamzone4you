@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "sample-action-movie-2026",
+    "title": "Sample Action Movie (2026)",
+    "category": "Action",
+    "year": "2026",
+    "date": "2026-08-01",
+    "thumbnail": "https://placehold.co/300x450/1a1d24/f97316?text=Action+2026",
+    "body": "<p>Placeholder synopsis. Replace this whole entry with your real post once you export your Blogger content.</p><h3>Quality &amp; Download</h3><table><thead><tr><th>Quality</th><th>Size</th><th>Link</th></tr></thead><tbody><tr><td>480p</td><td>350MB</td><td><a href=\"#\">Download</a></td></tr><tr><td>720p</td><td>900MB</td><td><a href=\"#\">Download</a></td></tr><tr><td>1080p</td><td>2.1GB</td><td><a href=\"#\">Download</a></td></tr></tbody></table>"
+  },
+  {
+    "slug": "sample-comedy-show-2025",
+    "title": "Sample Comedy Series S01 (2025)",
+    "category": "Comedy",
+    "year": "2025",
+    "date": "2025-11-14",
+    "thumbnail": "https://placehold.co/300x450/1a1d24/38bdf8?text=Comedy+2025",
+    "body": "<p>Placeholder synopsis for a comedy series entry.</p><h3>Season 1</h3><table><thead><tr><th>Episode</th><th>Quality</th><th>Link</th></tr></thead><tbody><tr><td>E01</td><td>720p</td><td><a href=\"#\">Download</a></td></tr><tr><td>E02</td><td>720p</td><td><a href=\"#\">Download</a></td></tr></tbody></table>"
+  },
+  {
+    "slug": "sample-drama-film-2024",
+    "title": "Sample Drama Film (2024)",
+    "category": "Drama",
+    "year": "2024",
+    "date": "2024-05-22",
+    "thumbnail": "https://placehold.co/300x450/1a1d24/f97316?text=Drama+2024",
+    "body": "<p>Placeholder synopsis for a drama film entry.</p><h3>Quality &amp; Download</h3><table><thead><tr><th>Quality</th><th>Size</th><th>Link</th></tr></thead><tbody><tr><td>1080p</td><td>1.8GB</td><td><a href=\"#\">Download</a></td></tr></tbody></table>"
+  },
+  {
+    "slug": "sample-scifi-movie-2023",
+    "title": "Sample Sci-fi Movie (2023)",
+    "category": "Sci-fi",
+    "year": "2023",
+    "date": "2023-09-03",
+    "thumbnail": "https://placehold.co/300x450/1a1d24/38bdf8?text=Sci-fi+2023",
+    "body": "<p>Placeholder synopsis for a sci-fi entry.</p><h3>Quality &amp; Download</h3><table><thead><tr><th>Quality</th><th>Size</th><th>Link</th></tr></thead><tbody><tr><td>720p</td><td>1.1GB</td><td><a href=\"#\">Download</a></td></tr><tr><td>1080p</td><td>2.4GB</td><td><a href=\"#\">Download</a></td></tr></tbody></table>"
+  },
+  {
+    "slug": "sample-action-classic-2022",
+    "title": "Sample Action Classic (2022)",
+    "category": "Action",
+    "year": "2022",
+    "date": "2022-02-18",
+    "thumbnail": "https://placehold.co/300x450/1a1d24/f97316?text=Action+2022",
+    "body": "<p>Placeholder synopsis for an older catalog entry.</p><h3>Quality &amp; Download</h3><table><thead><tr><th>Quality</th><th>Size</th><th>Link</th></tr></thead><tbody><tr><td>480p</td><td>320MB</td><td><a href=\"#\">Download</a></td></tr></tbody></table>"
+  }
+]
