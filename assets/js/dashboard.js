@@ -13,18 +13,8 @@
    Anyone who can view page source/devtools could bypass it.
    It just keeps the dashboard out of casual browsing.
 
-   Default password is: streamzone
-   To set your own: open browser devtools console on ANY page
-   and run:
-     crypto.subtle.digest("SHA-256", new TextEncoder().encode("yourpassword"))
-       .then(b => console.log(Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,"0")).join("")))
-   Copy the printed hash and paste it in as ADMIN_PASSWORD_HASH below. */
-const ADMIN_PASSWORD_HASH = "0c62320071ebc75e7346572e02d34c8e4167fbefbb532546f517ef54351286e0"; // default password: streamzone — CHANGE THIS, see README
-
-async function sha256Hex(text) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
+   To change the password: just edit the value below and push. */
+const ADMIN_PASSWORD = "dhruv@96395"; // CHANGE THIS to whatever you want
 
 function isUnlocked() {
   return sessionStorage.getItem("sz4y_dash_unlocked") === "true";
@@ -45,12 +35,11 @@ function lock() {
 }
 
 function wireLockForm() {
-  document.getElementById("lock-form").addEventListener("submit", async (e) => {
+  document.getElementById("lock-form").addEventListener("submit", (e) => {
     e.preventDefault();
     const entered = document.getElementById("password-input").value;
-    const hash = await sha256Hex(entered);
     const statusEl = document.getElementById("lock-status");
-    if (hash === ADMIN_PASSWORD_HASH) {
+    if (entered === ADMIN_PASSWORD) {
       unlock();
     } else {
       statusEl.textContent = "Wrong password.";
@@ -164,6 +153,9 @@ function clearForm() {
   document.getElementById("slug-input").readOnly = false;
   document.getElementById("date-input").value = new Date().toISOString().slice(0, 10);
   document.getElementById("cancel-edit-btn").style.display = "none";
+  const editor = document.getElementById("body-editor");
+  if (editor) editor.innerHTML = "";
+  document.getElementById("body-input").value = "";
 }
 
 window.editPost = function (slug) {
@@ -179,6 +171,8 @@ window.editPost = function (slug) {
   document.getElementById("date-input").value = p.date;
   document.getElementById("thumbnail-input").value = p.thumbnail || "";
   document.getElementById("body-input").value = p.body || "";
+  const editor = document.getElementById("body-editor");
+  if (editor) editor.innerHTML = p.body || "";
   document.getElementById("cancel-edit-btn").style.display = "inline-block";
   window.scrollTo({ top: document.getElementById("post-form").offsetTop - 20, behavior: "smooth" });
 };
@@ -213,6 +207,7 @@ function wireForm() {
 
   document.getElementById("post-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    syncEditorToHiddenInput();
     const title = document.getElementById("title-input").value.trim();
     const slug = document.getElementById("slug-input").value.trim();
     const category = document.getElementById("category-input").value.trim();
@@ -264,10 +259,95 @@ function wireForm() {
   });
 }
 
+/* --- RICH TEXT EDITOR (Posts tab body field) --- */
+let htmlModeOn = false;
+
+function syncEditorToHiddenInput() {
+  if (htmlModeOn) return; // textarea is already the source of truth in HTML mode
+  const editor = document.getElementById("body-editor");
+  const hiddenInput = document.getElementById("body-input");
+  if (editor && hiddenInput) hiddenInput.value = editor.innerHTML.trim();
+}
+
+function wireEditor() {
+  const editor = document.getElementById("body-editor");
+  const hiddenInput = document.getElementById("body-input");
+  const toolbar = document.querySelector(".editor-toolbar");
+  const toggleLink = document.getElementById("toggle-html-mode");
+  if (!editor || !hiddenInput || !toggleLink) return;
+
+  document.querySelectorAll(".editor-btn[data-cmd]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      editor.focus();
+      document.execCommand(btn.dataset.cmd, false, null);
+    });
+  });
+
+  document.querySelectorAll(".editor-btn[data-block]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      editor.focus();
+      document.execCommand("formatBlock", false, btn.dataset.block);
+    });
+  });
+
+  document.getElementById("insert-link-btn").addEventListener("click", () => {
+    const url = prompt("Link URL (e.g. https://...):");
+    if (!url) return;
+    editor.focus();
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed) {
+      const text = prompt("Text to show for the link:", url) || url;
+      document.execCommand("insertHTML", false, `<a href="${url}" target="_blank">${text}</a>`);
+    } else {
+      document.execCommand("createLink", false, url);
+    }
+  });
+
+  document.getElementById("insert-image-btn").addEventListener("click", () => {
+    const url = prompt("Image URL:");
+    if (!url) return;
+    editor.focus();
+    document.execCommand("insertImage", false, url);
+  });
+
+  document.getElementById("insert-download-btn").addEventListener("click", () => {
+    const url = prompt("Where should the Download Now button link to?");
+    if (!url) return;
+    editor.focus();
+    document.execCommand("insertHTML", false,
+      `<div class="download-cta"><a class="btn-download-now" href="${url}" target="_blank">⬇ Download Now</a></div>`);
+  });
+
+  document.getElementById("clear-format-btn").addEventListener("click", () => {
+    editor.focus();
+    document.execCommand("removeFormat");
+    document.execCommand("formatBlock", false, "P");
+  });
+
+  toggleLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    htmlModeOn = !htmlModeOn;
+    if (htmlModeOn) {
+      hiddenInput.value = editor.innerHTML.trim();
+      hiddenInput.style.display = "block";
+      editor.style.display = "none";
+      toolbar.style.display = "none";
+      toggleLink.textContent = "switch to rich text mode";
+    } else {
+      editor.innerHTML = hiddenInput.value;
+      hiddenInput.style.display = "none";
+      editor.style.display = "block";
+      toolbar.style.display = "flex";
+      toggleLink.textContent = "switch to HTML mode";
+    }
+  });
+}
+
 async function init() {
   wireTabs();
   wireForm();
   wireSettingsForm();
+  wireEditor();
   clearForm();
 
   try {
