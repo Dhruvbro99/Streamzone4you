@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dashboard — StreamZone4You</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo"><a href="index.html">Stream<span>Zone</span></a> <span style="font-size:14px;color:#94a3b8;">/ Dashboard</span></div>
+    </div>
+  </header>
+
+  <!-- LOCK SCREEN: shown until the correct password is entered -->
+  <div id="lock-screen" class="admin-wrap">
+    <div class="admin-panel" style="max-width:380px;margin:60px auto;">
+      <h2>Owner Dashboard</h2>
+      <p style="color:#94a3b8;font-size:14px;margin-bottom:18px;">
+        Enter the password to continue. This isn't real security — see below.
+      </p>
+      <form id="lock-form">
+        <div class="field">
+          <label for="password-input">Password</label>
+          <input id="password-input" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary">Enter dashboard</button>
+        </div>
+      </form>
+      <div id="lock-status" class="status-msg" style="display:none;"></div>
+      <p style="font-size:12px;color:#64748b;margin-bottom:0;margin-top:16px;">
+        This is a client-side lock, not a real backend. Anyone who reads the
+        page source could get past it — it only stops casual visitors. See
+        README.md to set your own password.
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (hidden until unlocked) -->
+  <div id="dash-root" class="admin-wrap" style="display:none;">
+
+    <div class="admin-note">
+      Everything here edits an <strong>in-browser copy</strong> of your data —
+      nothing saves itself. Each tab has its own <strong>Download</strong>
+      button; grab the updated file and replace it in your GitHub repo, then
+      commit/push to actually publish the change.
+    </div>
+
+    <div class="dash-tabs" role="tablist">
+      <button class="dash-tab active" data-tab="settings">Site settings</button>
+      <button class="dash-tab" data-tab="posts">Posts</button>
+    </div>
+
+    <!-- SITE SETTINGS PANEL -->
+    <div class="dash-panel active" id="panel-settings">
+      <div class="admin-panel">
+        <h2>Site Settings</h2>
+        <p style="color:#94a3b8;font-size:13px;margin-top:-8px;">
+          Drives the page titles and footer copyright text across the site
+          (the header wordmark stays as its own styled graphic).
+        </p>
+        <form id="settings-form">
+          <div class="field">
+            <label for="site-name-input">Site name</label>
+            <input id="site-name-input" type="text" required>
+          </div>
+          <div class="field">
+            <label for="tagline-input">Tagline</label>
+            <input id="tagline-input" type="text">
+          </div>
+          <div class="field">
+            <label for="logo-text-input">Logo text (reserved for future use)</label>
+            <input id="logo-text-input" type="text">
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </div>
+        </form>
+        <div id="settings-status" class="status-msg" style="display:none;"></div>
+        <div class="download-banner">
+          <button id="download-settings-btn" class="btn btn-primary">⬇ Download site-config.json</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTS PANEL -->
+    <div class="dash-panel" id="panel-posts">
+      <div class="admin-panel">
+        <h2 id="form-heading">Add New Post</h2>
+        <form id="post-form">
+          <div class="field">
+            <label for="title-input">Title</label>
+            <input id="title-input" type="text" placeholder="e.g. Sample Action Movie (2026)" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="slug-input">Slug (URL id, auto-filled)</label>
+              <input id="slug-input" type="text" required>
+            </div>
+            <div class="field">
+              <label for="category-input">Category</label>
+              <input id="category-input" list="category-options" type="text" placeholder="Action" required>
+              <datalist id="category-options">
+                <option value="Action">
+                <option value="Comedy">
+                <option value="Drama">
+                <option value="Sci-fi">
+              </datalist>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="year-input">Year</label>
+              <input id="year-input" type="text" placeholder="2026" required>
+            </div>
+            <div class="field">
+              <label for="date-input">Date</label>
+              <input id="date-input" type="date" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="thumbnail-input">Thumbnail image URL</label>
+            <input id="thumbnail-input" type="text" placeholder="https://...">
+          </div>
+          <div class="field">
+            <label for="body-input">Post body (HTML — paragraphs, &lt;h3&gt;, tables, etc.)</label>
+            <textarea id="body-input" placeholder="&lt;p&gt;Synopsis...&lt;/p&gt;"></textarea>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">Save Post</button>
+            <button type="button" id="cancel-edit-btn" class="btn btn-secondary" style="display:none;">Cancel Edit</button>
+          </div>
+        </form>
+        <div id="status-msg" class="status-msg" style="display:none;"></div>
+      </div>
+
+      <div class="admin-panel">
+        <h2>Current Posts</h2>
+        <div id="post-list"></div>
+      </div>
+
+      <div class="download-banner">
+        <p style="margin-top:0;color:#94a3b8;font-size:13px;">When you're finished adding/editing posts:</p>
+        <button id="download-btn" class="btn btn-primary">⬇ Download posts.json</button>
+        <p style="font-size:12px;color:#64748b;margin-bottom:0;margin-top:14px;">
+          Opening this page without a local server? Load your current file manually:
+        </p>
+        <input id="import-input" type="file" accept="application/json" style="margin-top:8px;">
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:20px;">
+      <button id="logout-btn" class="btn btn-secondary">Lock this page</button>
+    </div>
+
+  </div>
+
+  <footer>
+    <span data-site="copyright-year-name">&copy; StreamZone4You. All rights reserved.</span>
+    <span style="display:block;margin-top:4px;">Owner dashboard — not linked publicly</span>
+  </footer>
+
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
