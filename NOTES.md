@@ -44,9 +44,9 @@ restructures it to match a config-driven, multi-file pattern:
   on it at all.
 
 ## Manual steps for you
-1. Open `assets/js/dashboard.js` and change `ADMIN_PASSWORD_HASH` from the
-   default (`streamzone`) to your own — instructions are in the file and in
-   `README.md`.
+1. Open `assets/js/dashboard.js` and change `ADMIN_PASSWORD` from the
+   default (`streamzone`) to your own — it's a plain string, just edit it
+   directly (see `README.md` for details).
 2. Fill in your real posts via the dashboard or by editing `data/posts.json`
    directly, replacing the 5 placeholder entries.
 3. After any dashboard edit, download the updated JSON file and commit/push

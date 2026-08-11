@@ -128,24 +128,8 @@
             <input id="thumbnail-input" type="text" placeholder="https://...">
           </div>
           <div class="field">
-            <label for="body-editor">Post body</label>
-            <div class="editor-toolbar">
-              <button type="button" class="editor-btn" data-cmd="bold" title="Bold"><strong>B</strong></button>
-              <button type="button" class="editor-btn" data-cmd="italic" title="Italic"><em>I</em></button>
-              <button type="button" class="editor-btn" data-block="H2" title="Section heading">H2</button>
-              <button type="button" class="editor-btn" data-block="P" title="Normal paragraph">¶</button>
-              <button type="button" class="editor-btn" data-cmd="insertUnorderedList" title="Bullet list">• List</button>
-              <button type="button" class="editor-btn" id="insert-link-btn" title="Insert link">🔗 Link</button>
-              <button type="button" class="editor-btn" id="insert-image-btn" title="Insert image">🖼 Image</button>
-              <button type="button" class="editor-btn" id="insert-download-btn" title="Insert Download Now button">⬇ Download Btn</button>
-              <button type="button" class="editor-btn" id="clear-format-btn" title="Clear formatting">Clear</button>
-            </div>
-            <div id="body-editor" class="body-editor" contenteditable="true"></div>
-            <textarea id="body-input" style="display:none;"></textarea>
-            <p style="font-size:11px;color:#64748b;margin-top:6px;">
-              Type and use the buttons above — no code needed. (Prefer raw HTML?
-              <a href="#" id="toggle-html-mode">switch to HTML mode</a>.)
-            </p>
+            <label for="body-input">Post body (HTML — paragraphs, &lt;h3&gt;, tables, etc.)</label>
+            <textarea id="body-input" placeholder="&lt;p&gt;Synopsis...&lt;/p&gt;"></textarea>
           </div>
           <div class="btn-row">
             <button type="submit" class="btn btn-primary">Save Post</button>

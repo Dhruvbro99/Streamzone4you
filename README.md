@@ -78,16 +78,14 @@ only (there's no real backend to enforce it), so anyone determined enough
 with browser devtools could bypass it — but it keeps the page out of casual
 reach, which is all a static site can offer. To set your own password:
 
-1. Open your browser's devtools console on any page (F12 → Console tab).
-2. Paste and run, replacing `yourpassword`:
-   ```js
-   crypto.subtle.digest("SHA-256", new TextEncoder().encode("yourpassword"))
-     .then(b => console.log(Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,"0")).join("")))
-   ```
-3. Copy the printed hash.
-4. Open `assets/js/dashboard.js`, find the `ADMIN_PASSWORD_HASH` line near the
-   top, and replace the value with your new hash.
-5. Save, commit, and push.
+1. Open `assets/js/dashboard.js`.
+2. Find the `ADMIN_PASSWORD` line near the top and change the value between
+   the quotes to whatever you want.
+3. Save, commit, and push.
+
+Note the password is stored in plain text in this file, so it's visible to
+anyone who views the page source — same as everything else about this lock,
+it's a deterrent, not real security.
 
 Once unlocked, the dashboard has two tabs:
 

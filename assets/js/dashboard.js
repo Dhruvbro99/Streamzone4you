@@ -153,9 +153,6 @@ function clearForm() {
   document.getElementById("slug-input").readOnly = false;
   document.getElementById("date-input").value = new Date().toISOString().slice(0, 10);
   document.getElementById("cancel-edit-btn").style.display = "none";
-  const editor = document.getElementById("body-editor");
-  if (editor) editor.innerHTML = "";
-  document.getElementById("body-input").value = "";
 }
 
 window.editPost = function (slug) {
@@ -171,8 +168,6 @@ window.editPost = function (slug) {
   document.getElementById("date-input").value = p.date;
   document.getElementById("thumbnail-input").value = p.thumbnail || "";
   document.getElementById("body-input").value = p.body || "";
-  const editor = document.getElementById("body-editor");
-  if (editor) editor.innerHTML = p.body || "";
   document.getElementById("cancel-edit-btn").style.display = "inline-block";
   window.scrollTo({ top: document.getElementById("post-form").offsetTop - 20, behavior: "smooth" });
 };
@@ -207,7 +202,6 @@ function wireForm() {
 
   document.getElementById("post-form").addEventListener("submit", (e) => {
     e.preventDefault();
-    syncEditorToHiddenInput();
     const title = document.getElementById("title-input").value.trim();
     const slug = document.getElementById("slug-input").value.trim();
     const category = document.getElementById("category-input").value.trim();
@@ -259,95 +253,10 @@ function wireForm() {
   });
 }
 
-/* --- RICH TEXT EDITOR (Posts tab body field) --- */
-let htmlModeOn = false;
-
-function syncEditorToHiddenInput() {
-  if (htmlModeOn) return; // textarea is already the source of truth in HTML mode
-  const editor = document.getElementById("body-editor");
-  const hiddenInput = document.getElementById("body-input");
-  if (editor && hiddenInput) hiddenInput.value = editor.innerHTML.trim();
-}
-
-function wireEditor() {
-  const editor = document.getElementById("body-editor");
-  const hiddenInput = document.getElementById("body-input");
-  const toolbar = document.querySelector(".editor-toolbar");
-  const toggleLink = document.getElementById("toggle-html-mode");
-  if (!editor || !hiddenInput || !toggleLink) return;
-
-  document.querySelectorAll(".editor-btn[data-cmd]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      editor.focus();
-      document.execCommand(btn.dataset.cmd, false, null);
-    });
-  });
-
-  document.querySelectorAll(".editor-btn[data-block]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      editor.focus();
-      document.execCommand("formatBlock", false, btn.dataset.block);
-    });
-  });
-
-  document.getElementById("insert-link-btn").addEventListener("click", () => {
-    const url = prompt("Link URL (e.g. https://...):");
-    if (!url) return;
-    editor.focus();
-    const sel = window.getSelection();
-    if (!sel || sel.isCollapsed) {
-      const text = prompt("Text to show for the link:", url) || url;
-      document.execCommand("insertHTML", false, `<a href="${url}" target="_blank">${text}</a>`);
-    } else {
-      document.execCommand("createLink", false, url);
-    }
-  });
-
-  document.getElementById("insert-image-btn").addEventListener("click", () => {
-    const url = prompt("Image URL:");
-    if (!url) return;
-    editor.focus();
-    document.execCommand("insertImage", false, url);
-  });
-
-  document.getElementById("insert-download-btn").addEventListener("click", () => {
-    const url = prompt("Where should the Download Now button link to?");
-    if (!url) return;
-    editor.focus();
-    document.execCommand("insertHTML", false,
-      `<div class="download-cta"><a class="btn-download-now" href="${url}" target="_blank">⬇ Download Now</a></div>`);
-  });
-
-  document.getElementById("clear-format-btn").addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("removeFormat");
-    document.execCommand("formatBlock", false, "P");
-  });
-
-  toggleLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    htmlModeOn = !htmlModeOn;
-    if (htmlModeOn) {
-      hiddenInput.value = editor.innerHTML.trim();
-      hiddenInput.style.display = "block";
-      editor.style.display = "none";
-      toolbar.style.display = "none";
-      toggleLink.textContent = "switch to rich text mode";
-    } else {
-      editor.innerHTML = hiddenInput.value;
-      hiddenInput.style.display = "none";
-      editor.style.display = "block";
-      toolbar.style.display = "flex";
-      toggleLink.textContent = "switch to HTML mode";
-    }
-  });
-}
-
 async function init() {
   wireTabs();
   wireForm();
   wireSettingsForm();
-  wireEditor();
   clearForm();
 
   try {
